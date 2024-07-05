@@ -5,7 +5,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import '../mappers/movie_list_model.dart';
+import '../models/movie_list_model.dart';
 import '../repos/movie_repository.dart';
 
 part 'movies_event.dart';
@@ -40,7 +40,8 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
     emit(MoviesLoading());
     try {
       final movie = await movieRepository.fetchMovieDetails(event.movieId);
-      emit(MovieDetailsLoaded(movie));
+      final recoMovie = await movieRepository.fetchRecommended(event.movieId);
+      emit(MovieDetailsLoaded(movie, recoMovie));
     } on DioError catch (exc) {
       emit(MoviesError(exc.message ?? 'An unknown error occurred'));
     }

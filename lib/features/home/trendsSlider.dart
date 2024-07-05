@@ -3,7 +3,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:go_router/go_router.dart';
-import 'package:moviemax/features/movies/mappers/movie_list_model.dart';
+import 'package:moviemax/features/movies/models/movie_list_model.dart';
 import 'package:moviemax/features/movies/constants/api_constants.dart';
 
 class TrendsSLider extends StatefulWidget {

@@ -7,7 +7,7 @@ import 'package:moviemax/features/movies/constants/api_constants.dart';
 import 'package:moviemax/shared/colors.dart';
 import 'package:moviemax/shared/custom_appbar.dart';
 
-import '../movies/mappers/movie_list_model.dart';
+import '../movies/models/movie_list_model.dart';
 import '../movies/repos/movie_repository.dart';
 
 class HomeView extends StatefulWidget {

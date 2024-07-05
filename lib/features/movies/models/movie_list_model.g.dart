@@ -32,9 +32,7 @@ _$_MovieListModel _$$_MovieListModelFromJson(Map<String, dynamic> json) =>
       productionCountries: (json['productionCountries'] as List<dynamic>?)
           ?.map((e) => ProductionCountry.fromJson(e as Map<String, dynamic>))
           .toList(),
-      release_date: json['release_date'] == null
-          ? null
-          : DateTime.parse(json['release_date'] as String),
+      release_date: json['release_date'] as String?,
       revenue: json['revenue'] as int?,
       runtime: json['runtime'] as int?,
       spokenLanguages: (json['spokenLanguages'] as List<dynamic>?)
@@ -66,7 +64,7 @@ Map<String, dynamic> _$$_MovieListModelToJson(_$_MovieListModel instance) =>
       'poster_path': instance.poster_path,
       'productionCompanies': instance.productionCompanies,
       'productionCountries': instance.productionCountries,
-      'release_date': instance.release_date?.toIso8601String(),
+      'release_date': instance.release_date,
       'revenue': instance.revenue,
       'runtime': instance.runtime,
       'spokenLanguages': instance.spokenLanguages,

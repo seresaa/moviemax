@@ -39,9 +39,12 @@ class MoviesError extends MoviesState {
 
 class MovieDetailsLoaded extends MoviesState {
   final MovieListModel movie;
+   final List<MovieListModel> recommendedMovies;
 
-  const MovieDetailsLoaded(this.movie);
+  const MovieDetailsLoaded(this.movie, this.recommendedMovies);
 
   @override
-  List<Object> get props => [movie];
+  List<Object> get props => [movie, recommendedMovies];
+  
 }
+

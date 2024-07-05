@@ -10,3 +10,8 @@ class FetchMovieDetailsEvent extends MoviesEvent {
 
   FetchMovieDetailsEvent(this.movieId);
 }
+
+class FetchRecommendedEvent extends MoviesEvent {
+  final String movieId;
+  FetchRecommendedEvent(this.movieId);
+}

@@ -9,7 +9,7 @@ import 'package:moviemax/features/movies/repos/movie_repository.dart';
 import 'package:moviemax/shared/colors.dart';
 import 'package:moviemax/shared/custom_appbar.dart';
 import 'package:intl/intl.dart';
-import '../movies/mappers/movie_list_model.dart';
+import '../movies/models/movie_list_model.dart';
 
 class MovieDetails extends StatefulWidget {
   final String movieId;
@@ -38,44 +38,49 @@ class _MovieDetailsState extends State<MovieDetails> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: MovieMaxColors.bgColor,
-      appBar: MyAppBar(
-        icon: 2,
-        onBackPressed: () {
-          context.pop();
-        },
-      ),
-      body: Stack(children: [
-        BlocProvider(
-          create: (context) => moviesBloc,
-          child: BlocBuilder<MoviesBloc, MoviesState>(
-            builder: (context, state) {
-              if (state is MoviesLoading) {
-                return Center(child: CircularProgressIndicator());
-              } else if (state is MovieDetailsLoaded) {
-                return ListView(
-                  children: [
-                    _buildMovieSection(state.movie),
-                    _buildSynopsisSection(state.movie),
-                  ],
-                );
-              } else if (state is MoviesError) {
-                return Center(child: Text(state.message));
-              }
-              return Container();
-            },
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: MovieMaxColors.bgColor,
+        body: Stack(children: [
+          BlocProvider(
+            create: (context) => moviesBloc,
+            child: BlocBuilder<MoviesBloc, MoviesState>(
+              builder: (context, state) {
+                if (state is MoviesLoading) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (state is MovieDetailsLoaded) {
+                  return ListView(
+                    children: [
+                      _buildMovieSection(state.movie),
+                      _buildSynopsisSection(state.movie),
+                      _RecommendedSection(
+                          state.recommendedMovies, 'Recommended')
+                    ],
+                  );
+                } else if (state is MoviesError) {
+                  return Center(child: Text(state.message));
+                }
+                return Container();
+              },
+            ),
           ),
-        ),
-      ]),
+        ]),
+      ),
     );
   }
 
   Widget _buildMovieSection(MovieListModel movie) {
-    String genres = movie.genres?.map((genre) => genre.name).join(', ') ?? ' ';
-    String releaseYear = movie.release_date != null
-        ? DateFormat('yyyy').format(movie.release_date!)
-        : '';
+    String genres =
+        movie.genres?.take(2).map((genre) => genre.name).join(', ') ?? ' ';
+    String releaseYear = '';
+    if (movie.release_date != null) {
+      try {
+        final date = DateTime.parse(movie.release_date!);
+        releaseYear = DateFormat('yyyy').format(date);
+      } catch (e) {
+        print('Error parsing date: $e');
+      }
+    }
 
     return Stack(
       children: [
@@ -97,6 +102,12 @@ class _MovieDetailsState extends State<MovieDetails> {
               ),
             ),
           ),
+        ),
+        MyAppBar(
+          icon: 2,
+          onBackPressed: () {
+            context.pop();
+          },
         ),
         Positioned(
           top: 50,
@@ -138,19 +149,44 @@ class _MovieDetailsState extends State<MovieDetails> {
           left: 16,
           right: 16,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     movie.title,
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 25,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
                   ),
+                ],
+              ),
+              SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Flexible(
+                    child: Text(
+                      genres,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 16),
+                  Icon(Icons.circle, color: Colors.white, size: 5),
+                  SizedBox(width: 16),
+                  Text(
+                    releaseYear,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(width: 16),
                   Row(
                     children: [
                       Icon(
@@ -170,28 +206,6 @@ class _MovieDetailsState extends State<MovieDetails> {
                   ),
                 ],
               ),
-              SizedBox(height: 8),
-              Row(
-                children: [
-                  Text(
-                    genres,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                    ),
-                  ),
-                  SizedBox(width: 16),
-                  Icon(Icons.circle, color: Colors.white, size: 5),
-                  SizedBox(width: 16),
-                  Text(
-                    releaseYear,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
             ],
           ),
         ),
@@ -206,15 +220,16 @@ class _MovieDetailsState extends State<MovieDetails> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Overview',
+            'Synopsis',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
           ),
-          SizedBox(height: 8),
+          SizedBox(height: 16),
           Text(
+            textAlign: TextAlign.justify,
             movie.overview,
             style: TextStyle(
               fontSize: 15,
@@ -223,6 +238,56 @@ class _MovieDetailsState extends State<MovieDetails> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _RecommendedSection(
+      List<MovieListModel> recommendedMovies, String title) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text(
+            title,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: MovieMaxColors.white,
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SizedBox(
+            height: 200,
+            child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: recommendedMovies.length,
+                itemBuilder: (context, index) {
+                  final movie = recommendedMovies[index];
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                      child: Image.network(
+                        '${ImgConstants.imgPath}${movie.poster_path}',
+                        height: 250,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Image.network(
+                            'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/495px-No-Image-Placeholder.svg.png?20200912122019',
+                            height: 150,
+                          );
+                        },
+                      ),
+                      onTap: () {
+                        context.go('/home/movieDetails/${movie.id}');
+                      },
+                    ),
+                  );
+                }),
+          ),
+        )
+      ],
     );
   }
 }

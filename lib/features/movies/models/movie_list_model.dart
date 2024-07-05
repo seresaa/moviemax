@@ -22,7 +22,7 @@ class MovieListModel with _$MovieListModel {
     String? poster_path,
     List<ProductionCompany>? productionCompanies,
     List<ProductionCountry>? productionCountries,
-    DateTime? release_date,
+    String? release_date,
     int? revenue,
     int? runtime,
     List<SpokenLanguage>? spokenLanguages,

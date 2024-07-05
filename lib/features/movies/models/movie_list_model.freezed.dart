@@ -38,7 +38,7 @@ mixin _$MovieListModel {
       throw _privateConstructorUsedError;
   List<ProductionCountry>? get productionCountries =>
       throw _privateConstructorUsedError;
-  DateTime? get release_date => throw _privateConstructorUsedError;
+  String? get release_date => throw _privateConstructorUsedError;
   int? get revenue => throw _privateConstructorUsedError;
   int? get runtime => throw _privateConstructorUsedError;
   List<SpokenLanguage>? get spokenLanguages =>
@@ -79,7 +79,7 @@ abstract class $MovieListModelCopyWith<$Res> {
       String? poster_path,
       List<ProductionCompany>? productionCompanies,
       List<ProductionCountry>? productionCountries,
-      DateTime? release_date,
+      String? release_date,
       int? revenue,
       int? runtime,
       List<SpokenLanguage>? spokenLanguages,
@@ -199,7 +199,7 @@ class _$MovieListModelCopyWithImpl<$Res, $Val extends MovieListModel>
       release_date: freezed == release_date
           ? _value.release_date
           : release_date // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+              as String?,
       revenue: freezed == revenue
           ? _value.revenue
           : revenue // ignore: cast_nullable_to_non_nullable
@@ -265,7 +265,7 @@ abstract class _$$_MovieListModelCopyWith<$Res>
       String? poster_path,
       List<ProductionCompany>? productionCompanies,
       List<ProductionCountry>? productionCountries,
-      DateTime? release_date,
+      String? release_date,
       int? revenue,
       int? runtime,
       List<SpokenLanguage>? spokenLanguages,
@@ -383,7 +383,7 @@ class __$$_MovieListModelCopyWithImpl<$Res>
       release_date: freezed == release_date
           ? _value.release_date
           : release_date // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+              as String?,
       revenue: freezed == revenue
           ? _value.revenue
           : revenue // ignore: cast_nullable_to_non_nullable
@@ -530,7 +530,7 @@ class _$_MovieListModel implements _MovieListModel {
   }
 
   @override
-  final DateTime? release_date;
+  final String? release_date;
   @override
   final int? revenue;
   @override
@@ -675,7 +675,7 @@ abstract class _MovieListModel implements MovieListModel {
       final String? poster_path,
       final List<ProductionCompany>? productionCompanies,
       final List<ProductionCountry>? productionCountries,
-      final DateTime? release_date,
+      final String? release_date,
       final int? revenue,
       final int? runtime,
       final List<SpokenLanguage>? spokenLanguages,
@@ -722,7 +722,7 @@ abstract class _MovieListModel implements MovieListModel {
   @override
   List<ProductionCountry>? get productionCountries;
   @override
-  DateTime? get release_date;
+  String? get release_date;
   @override
   int? get revenue;
   @override
